@@ -13,6 +13,7 @@ const bodyClass = `${testConfig.id}_loaded`.replace(/ /g, '-').toLowerCase()
 const isMoble = isMobileSite()
 
 function getProdCode() {
+	// Gets product code from img src
 	let prodImgEl = document.querySelector('.dth-add-to-basket__image')
 	let source = prodImgEl.getAttribute('src')
 	let productCode = source.split('/').pop().replace(".jpg", "")
@@ -35,35 +36,42 @@ function buildProductEl(product, single = true) {
 
 function init() {
 	beethoven('Init Function Called')
+	// Stop code running multiple times on page
 	if (!document.body.classList.contains(bodyClass)) {
 		document.body.classList.add(bodyClass);
 		addStylesToDOM(variationCSS)
 
 		let placementName = 'add_to_cart_page.Popupaddtocart'
 		let targetNode = document.querySelector('[data-module="dth_add_to_basket"]')
+		// Watch the basket element for changes in the class attribute (MutationObserver)
 		watchForChange(targetNode, _ => {
 			RR.jsonCallback = function(){
+				// Check if el already exists and remove it if it does
 				let elAlreadyExists = document.querySelector('.rr_product_container') !== null
 				if (elAlreadyExists) {
 					document.querySelector('.rr_product_container').remove()
 				}
-				// Place your rendering logic here. Actual code varies depending on your website implementation.
+				// Filter the returned placements
 				let placements = RR.data.JSON.placements
 				let addToCartPlacement = placements.filter( a => a.placement_name === placementName)[0]
 				let products = addToCartPlacement.items
+				// Check if mobile and change the message
 				let message = isMoble ? "Customers also bought..." : "Customers who bought this also bought..."
+				// Build the product element using the first recommendation
 				let productEl = buildProductEl(products[0])
 				let el = `<div class="rr_product_container">${productEl}</div>`
+				// Add the element to the basket popup/modal
 				targetNode.insertAdjacentHTML('beforeend', el)
 			};
 
+			// Clearing the old context
 			if(typeof R3_ITEM !=='undefined') R3_ITEM = undefined;
 			R3_COMMON.placementTypes='';
 			//if used on the item page previously
 			R3_COMMON.categoryHintIds='';
 
+			// Setting the new context
 			R3_COMMON.addPlacementType(placementName);
-
 			var R3_ADDTOCART = new r3_addtocart();
 			R3_ADDTOCART.addItemIdToCart(getProdCode());
 
@@ -75,6 +83,7 @@ function init() {
 }
 
 function pollConditions() {
+	// Make sure everything we need has loaded onto the page before running the init function
 	const conditions = typeof r3 !== "undefined"
 		&& typeof RR !== "undefined"
 		&& typeof R3_COMMON !== "undefined"
