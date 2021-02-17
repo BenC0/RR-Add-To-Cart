@@ -1,0 +1,33 @@
+.rr_add_to_cart_loaded [data-module="dth_add_to_basket"] {
+	& .rr_product_container {
+		display: flex;
+
+		& .rr_product {
+			display: flex;
+			flex-direction: column;
+
+			font-family: "Museo";
+
+			& .dth-rr__btn,
+			& img {
+				width: 100%;
+			}
+
+			& .info_container {
+				& > *:not(:first-child) {
+					margin-top: 1em;
+				}
+
+				& .title {
+					
+				}
+
+				& .dth-rr__btn {
+					background: white;
+					color: #4ba840;
+					border: 1px solid;
+				}
+			}
+		}
+	}
+}
