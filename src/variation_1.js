@@ -69,6 +69,7 @@ function init() {
 			R3_COMMON.placementTypes='';
 			//if used on the item page previously
 			R3_COMMON.categoryHintIds='';
+			R3_COMMON.itemIds='';
 
 			// Setting the new context
 			R3_COMMON.addPlacementType(placementName);
